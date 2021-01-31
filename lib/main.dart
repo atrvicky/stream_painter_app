@@ -10,8 +10,6 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 // TODO: need to add internet permissions
 // https://stackoverflow.com/questions/64197752/bad-state-insecure-http-is-not-allowed-by-platform
 
-// TODO: implement stream.listen instead of StreamBuilder, because the latter skips values?
-// https://stackoverflow.com/questions/54169848/streambuilder-not-receiving-some-snapshot-data?rq=1
 void main() {
   runApp(MyApp());
 }
@@ -38,11 +36,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   WebSocketChannel _channel; // initialize channel
   HashMap<String, dynamic> _steamData; // initialize stream data
+//  StreamController<List<dynamic>> _streamController;
 
   @override
   void initState() {
     super.initState();
-
+//    _streamController = StreamController<List<dynamic>>();
     // connect to private websocket. This websocket delivers a new value every 100 milliseconds
     _channel = IOWebSocketChannel.connect(
       'ws://142.93.238.122:8000/ws-3bebdd64-4f6f-4c62-a50b-5271bb06084c',
@@ -96,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      // These buttons don't do much right now, but that's fine
+      // These buttons don
       bottomNavigationBar: Row(
         children: [
           Expanded(
@@ -129,7 +128,6 @@ class DotPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final pointMode = ui.PointMode.points;
-
     // convert list of list to list of Offset()'s
     final points = playerCoords.map((dynamic player) {
       player = new List<dynamic>.from(player);
