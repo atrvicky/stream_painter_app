@@ -36,13 +36,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  WebSocketChannel _channel;
-
-  HashMap<String, dynamic> _steamData;
+  WebSocketChannel _channel; // initialize channel
+  HashMap<String, dynamic> _steamData; // initialize stream data
 
   @override
   void initState() {
     super.initState();
+
+    // connect to private websocket. This websocket delivers a new value every 100 milliseconds
     _channel = IOWebSocketChannel.connect(
       'ws://142.93.238.122:8000/ws-3bebdd64-4f6f-4c62-a50b-5271bb06084c',
     );
@@ -64,20 +65,24 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           child: StreamBuilder(
             stream: _channel.stream,
-            initialData: HashMap<String, dynamic>(),
+            initialData:
+                HashMap<String, dynamic>(), //initialize with empty data
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasError) {
+                // if errors return empty container?
                 return Container(width: 0.0, height: 0.0);
               } else if (!snapshot.hasData) {
+                // if no data return empty container?
                 return Container(width: 0.0, height: 0.0);
-//              } else if (snapshot.data.isEmpty()) {
-//                return null;
               } else {
                 try {
+                  // convert incoming JSON object :
+                  // the json object looks like this: {"players" :[[x, y], [x, y]]}
                   _steamData = new HashMap<String, dynamic>.from(
                     json.decode(snapshot.data),
                   );
                   return CustomPaint(
+                    // if we have values use DotPainter to draw the dots on the canvas
                     painter: DotPainter(
                       playerCoords: _steamData['players'],
                     ),
@@ -90,6 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+
+      // These buttons don't do much right now, but that's fine
       bottomNavigationBar: Row(
         children: [
           Expanded(
@@ -122,6 +129,7 @@ class DotPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final pointMode = ui.PointMode.points;
+
     // convert list of list to list of Offset()'s
     final points = playerCoords.map((dynamic player) {
       player = new List<dynamic>.from(player);
