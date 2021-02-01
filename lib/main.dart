@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -6,9 +5,6 @@ import 'dart:convert';
 
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-// TODO: need to add internet permissions
-// https://stackoverflow.com/questions/64197752/bad-state-insecure-http-is-not-allowed-by-platform
 
 void main() {
   runApp(MyApp());
@@ -87,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   );
                 } catch (e) {
+                  print("Err!");
                   return Container(width: 0.0, height: 0.0);
                 }
               }
@@ -144,6 +141,6 @@ class DotPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    throw true;
+    return true;
   }
 }
